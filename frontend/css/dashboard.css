@@ -1,0 +1,167 @@
+.app-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 1.5rem 0;
+}
+
+.sidebar a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  border-left-color: var(--green-light);
+  text-decoration: none;
+}
+
+.main-content {
+  padding: 2rem;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  color: var(--green-dark);
+  margin-bottom: 1.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--white);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.stat-card .label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.stat-card .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.card h2 {
+  font-size: 1.1rem;
+  color: var(--green-dark);
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-pendente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-pago,
+.badge-ativo,
+.badge-contratada {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-aberto {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.quote-result {
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
+  color: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.quote-result .price {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.quote-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: flex;
+    overflow-x: auto;
+    padding: 0;
+  }
+
+  .sidebar a {
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .quote-details {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

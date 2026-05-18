@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sinistro — Seguradora</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/forms.css" />
+</head>
+<body>
+  <header class="header">
+    <section class="container header-inner">
+      <a href="/pages/dashboard.html" class="logo">Seguradora</a>
+      <button id="btn-logout" class="btn btn-outline">Sair</button>
+    </section>
+  </header>
+  <section class="app-layout">
+    <nav class="sidebar" id="sidebar-nav"></nav>
+    <main class="main-content">
+      <h1 class="page-title">Acionar Sinistro</h1>
+      <p id="alert" class="alert alert-error hidden"></p>
+      <article class="card">
+        <form id="claim-form">
+          <p class="form-group">
+            <label for="insurance-select">Apólice</label>
+            <select id="insurance-select" required></select>
+          </p>
+          <p class="form-group">
+            <label for="type">Tipo</label>
+            <select id="type" required>
+              <option value="colisao">Colisão</option>
+              <option value="roubo">Roubo/Furto</option>
+              <option value="incendio">Incêndio</option>
+              <option value="fenomeno">Fenômeno natural</option>
+            </select>
+          </p>
+          <p class="form-group">
+            <label for="incident-date">Data do ocorrido</label>
+            <input type="date" id="incident-date" required />
+          </p>
+          <p class="form-group">
+            <label for="description">Descrição</label>
+            <textarea id="description" rows="4" required></textarea>
+          </p>
+          <button type="submit" class="btn btn-primary">Registrar sinistro</button>
+        </form>
+      </article>
+      <article class="card">
+        <h2>Histórico</h2>
+        <section id="claims-list">Carregando...</section>
+      </article>
+    </main>
+  </section>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    requireAuth();
+    renderSidebar('/pages/sinistro.html');
+    document.getElementById('btn-logout')?.addEventListener('click', logout);
+
+    async function init() {
+      const insurances = await api('/insurances');
+      const sel = document.getElementById('insurance-select');
+      sel.innerHTML = insurances.map((i) =>
+        `<option value="${i.id}">${i.policyNumber} — ${i.plate}</option>`
+      ).join('') || '<option value="">Sem apólice ativa</option>';
+
+      const claims = await api('/claims');
+      document.getElementById('claims-list').innerHTML = claims.length
+        ? claims.map((c) => `<p><strong>${c.type}</strong> — ${c.status} — ${c.incidentDate}<br>${c.description}</p>`).join('')
+        : '<p>Nenhum sinistro registrado.</p>';
+    }
+
+    document.getElementById('claim-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alert = document.getElementById('alert');
+      try {
+        await api('/claims', {
+          method: 'POST',
+          body: JSON.stringify({
+            insuranceId: document.getElementById('insurance-select').value,
+            type: document.getElementById('type').value,
+            incidentDate: document.getElementById('incident-date').value,
+            description: document.getElementById('description').value,
+          }),
+        });
+        showAlert(alert, 'Sinistro registrado com sucesso!', 'success');
+        init();
+      } catch (err) {
+        showAlert(alert, err.message);
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

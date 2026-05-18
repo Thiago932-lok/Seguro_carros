@@ -1,0 +1,12 @@
+{
+  "name": "seguradora",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Seguradora - proteção veicular para carros",
+  "scripts": {
+    "install:all": "npm install --prefix backend",
+    "dev": "npm run dev --prefix backend",
+    "start": "npm start --prefix backend",
+    "db:init": "npm run db:init --prefix backend"
+  }
+}

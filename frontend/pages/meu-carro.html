@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Carro — Seguradora</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/forms.css" />
+</head>
+<body>
+  <header class="header">
+    <section class="container header-inner">
+      <a href="/pages/dashboard.html" class="logo">Seguradora</a>
+      <button id="btn-logout" class="btn btn-outline">Sair</button>
+    </section>
+  </header>
+  <section class="app-layout">
+    <nav class="sidebar" id="sidebar-nav"></nav>
+    <main class="main-content">
+      <h1 class="page-title">Cadastrar Veículo</h1>
+      <p id="alert" class="alert alert-error hidden"></p>
+      <article class="card">
+        <form id="car-form">
+          <p class="form-row">
+            <span class="form-group">
+              <label for="fipe-brand">Marca FIPE (opcional)</label>
+              <select id="fipe-brand"></select>
+            </span>
+            <span class="form-group">
+              <label for="fipe-model">Modelo FIPE</label>
+              <select id="fipe-model"><option value="">Modelo</option></select>
+            </span>
+          </p>
+          <p class="form-row">
+            <span class="form-group">
+              <label for="brand">Marca</label>
+              <input id="brand" required placeholder="Ex: Volkswagen" />
+            </span>
+            <span class="form-group">
+              <label for="model">Modelo</label>
+              <input id="model" required placeholder="Ex: Gol 1.0" />
+            </span>
+          </p>
+          <p class="form-row">
+            <span class="form-group">
+              <label for="year">Ano</label>
+              <input type="number" id="year" min="1990" max="2026" required />
+            </span>
+            <span class="form-group">
+              <label for="plate">Placa</label>
+              <input id="plate" required placeholder="ABC1D23" maxlength="7" />
+            </span>
+          </p>
+          <p class="form-row">
+            <span class="form-group">
+              <label for="color">Cor</label>
+              <input id="color" />
+            </span>
+            <span class="form-group">
+              <label for="fipe-value">Valor FIPE manual (R$)</label>
+              <input type="number" id="fipe-value" step="0.01" placeholder="Se FIPE offline" />
+            </span>
+          </p>
+          <p class="form-row">
+            <span class="form-group">
+              <label for="usage">Uso</label>
+              <select id="usage">
+                <option value="particular">Particular</option>
+                <option value="comercial">Comercial</option>
+                <option value="app">App (Uber/99)</option>
+              </select>
+            </span>
+            <span class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="garage" /> Garagem fechada
+              </label>
+            </span>
+          </p>
+          <p class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar veículo</button>
+          </p>
+        </form>
+      </article>
+      <article class="card">
+        <h2>Meus veículos</h2>
+        <section id="cars-list">Carregando...</section>
+      </article>
+    </main>
+  </section>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/car.js"></script>
+  <script>
+    requireAuth();
+    renderSidebar('/pages/meu-carro.html');
+  </script>
+</body>
+</html>

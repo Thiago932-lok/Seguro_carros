@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagamentos — Seguradora</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+  <header class="header">
+    <section class="container header-inner">
+      <a href="/pages/dashboard.html" class="logo">Seguradora</a>
+      <button id="btn-logout" class="btn btn-outline">Sair</button>
+    </section>
+  </header>
+  <section class="app-layout">
+    <nav class="sidebar" id="sidebar-nav"></nav>
+    <main class="main-content">
+      <h1 class="page-title">Pagamentos</h1>
+      <section class="stats-grid">
+        <article class="stat-card"><span class="label">Pagas</span><p class="value" id="summary-paid">0</p></article>
+        <article class="stat-card"><span class="label">Pendentes</span><p class="value" id="summary-pending">0</p></article>
+      </section>
+      <article class="card">
+        <table>
+          <thead>
+            <tr><th>Mês</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ação</th></tr>
+          </thead>
+          <tbody id="payments-body"></tbody>
+        </table>
+      </article>
+    </main>
+  </section>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/payment.js"></script>
+</body>
+</html>

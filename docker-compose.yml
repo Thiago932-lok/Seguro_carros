@@ -1,0 +1,12 @@
+# Opcional: use SQLite local (padrão) ou descomente PostgreSQL
+services:
+  api:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - JWT_SECRET=seguradora-docker-secret
+    volumes:
+      - ./database:/app/database
+      - ./frontend:/app/frontend

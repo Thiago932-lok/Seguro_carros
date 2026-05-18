@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Seguro — Seguradora</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+  <header class="header">
+    <section class="container header-inner">
+      <a href="/pages/dashboard.html" class="logo">Seguradora</a>
+      <button id="btn-logout" class="btn btn-outline">Sair</button>
+    </section>
+  </header>
+  <section class="app-layout">
+    <nav class="sidebar" id="sidebar-nav"></nav>
+    <main class="main-content">
+      <h1 class="page-title">Minha Proteção</h1>
+      <section id="insurance-content">Carregando...</section>
+    </main>
+  </section>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    requireAuth();
+    renderSidebar('/pages/meu-seguro.html');
+    document.getElementById('btn-logout')?.addEventListener('click', logout);
+
+    api('/insurances').then((list) => {
+      const el = document.getElementById('insurance-content');
+      if (!list.length) {
+        el.innerHTML = '<article class="card"><p>Você ainda não contratou proteção.</p><a href="/pages/cotacao.html" class="btn btn-primary">Fazer cotação</a></article>';
+        return;
+      }
+      const i = list[0];
+      el.innerHTML = `
+        <article class="card">
+          <h2>Apólice ${i.policyNumber}</h2>
+          <p><strong>Status:</strong> <span class="badge badge-ativo">${i.status}</span></p>
+          <p><strong>Veículo:</strong> ${i.brand} ${i.model} (${i.plate})</p>
+          <p><strong>Mensalidade:</strong> ${formatMoney(i.monthlyPremium)}</p>
+          <p><strong>Valor coberto:</strong> ${formatMoney(i.coveredValue)}</p>
+          <p><strong>Franquia:</strong> ${formatMoney(i.franchise)}</p>
+          <p><strong>Vigência:</strong> ${i.validFrom} até ${i.validUntil}</p>
+        </article>
+        <article class="card">
+          <h2>Coberturas inclusas</h2>
+          <ul>
+            <li>Roubo e furto (100% FIPE)</li>
+            <li>Colisão e capotamento</li>
+            <li>Incêndio</li>
+            <li>Assistência 24h — guincho 400km</li>
+            <li>Carro reserva 7 dias</li>
+          </ul>
+        </article>`;
+    });
+  </script>
+</body>
+</html>
