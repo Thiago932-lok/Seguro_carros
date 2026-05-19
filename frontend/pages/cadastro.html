@@ -38,18 +38,7 @@
         </p>
         <p class="form-group">
           <label for="region">Estado (UF)</label>
-          <select id="region">
-            <option value="SP">SP</option>
-            <option value="RJ">RJ</option>
-            <option value="MG">MG</option>
-            <option value="PR">PR</option>
-            <option value="RS">RS</option>
-            <option value="BA">BA</option>
-            <option value="PE">PE</option>
-            <option value="CE">CE</option>
-            <option value="SC">SC</option>
-            <option value="GO">GO</option>
-          </select>
+          <select id="region" data-auto-region></select>
         </p>
         <p class="form-actions">
           <button type="submit" class="btn btn-primary">Criar conta</button>
@@ -59,6 +48,7 @@
     </article>
   </section>
   <script src="/js/api.js"></script>
+  <script src="/js/regions.js"></script>
   <script src="/js/auth.js"></script>
 </body>
 </html>

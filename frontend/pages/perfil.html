@@ -40,11 +40,7 @@
           </p>
           <p class="form-group">
             <label for="region">UF</label>
-            <select id="region">
-              <option value="SP">SP</option><option value="RJ">RJ</option>
-              <option value="MG">MG</option><option value="PR">PR</option>
-              <option value="RS">RS</option><option value="BA">BA</option>
-            </select>
+            <select id="region"></select>
           </p>
           <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
@@ -52,6 +48,7 @@
     </main>
   </section>
   <script src="/js/api.js"></script>
+  <script src="/js/regions.js"></script>
   <script src="/js/auth.js"></script>
   <script>
     requireAuth();
@@ -63,7 +60,7 @@
       document.getElementById('email').value = u.email;
       document.getElementById('cpf').value = u.cpf;
       document.getElementById('phone').value = u.phone || '';
-      document.getElementById('region').value = u.region || 'SP';
+      populateRegionSelect('region', u.region || 'SP');
     });
 
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
