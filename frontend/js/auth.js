@@ -20,15 +20,31 @@ async function handleLogin(e) {
 
 async function handleRegister(e) {
   e.preventDefault();
+  const form = e.target;
   const alert = document.getElementById('alert');
   hideAlert(alert);
 
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  const cpf = cleanCpf(document.getElementById('cpf').value);
+  if (cpf.length !== 11) {
+    showAlert(alert, 'Informe o CPF completo com 11 dígitos.');
+    return;
+  }
+  if (!validateCpfClient(cpf)) {
+    showAlert(alert, 'CPF inválido. Verifique os números informados.');
+    return;
+  }
+
   const body = {
-    name: document.getElementById('name').value,
-    cpf: document.getElementById('cpf').value,
-    email: document.getElementById('email').value,
+    name: document.getElementById('name').value.trim(),
+    cpf,
+    email: document.getElementById('email').value.trim(),
     password: document.getElementById('password').value,
-    phone: document.getElementById('phone').value,
+    phone: document.getElementById('phone').value.trim(),
     region: document.getElementById('region').value,
   };
 

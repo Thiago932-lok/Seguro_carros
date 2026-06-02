@@ -10,8 +10,11 @@ async function register(req, res, next) {
     const { name, cpf, email, password, phone, region } = req.body;
     const cpfClean = String(cpf).replace(/\D/g, '');
 
+    if (cpfClean.length !== 11) {
+      return res.status(400).json({ error: 'CPF deve conter 11 dígitos' });
+    }
     if (!validateCpf(cpfClean)) {
-      return res.status(400).json({ error: 'CPF inválido' });
+      return res.status(400).json({ error: 'CPF inválido. Verifique os números informados.' });
     }
     if (User.findByEmail(email)) {
       return res.status(409).json({ error: 'E-mail já cadastrado' });
@@ -37,6 +40,15 @@ async function register(req, res, next) {
       user: User.toPublic(User.findById(id)),
     });
   } catch (err) {
+    if (String(err.code || '').startsWith('SQLITE_CONSTRAINT')) {
+      const msg = String(err.message || '').toLowerCase();
+      if (msg.includes('cpf')) {
+        return res.status(409).json({ error: 'CPF já cadastrado' });
+      }
+      if (msg.includes('email')) {
+        return res.status(409).json({ error: 'E-mail já cadastrado' });
+      }
+    }
     next(err);
   }
 }

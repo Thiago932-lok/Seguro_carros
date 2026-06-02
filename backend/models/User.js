@@ -15,7 +15,14 @@ const User = {
   },
 
   findByCpf(cpf) {
-    return db.prepare('SELECT * FROM users WHERE cpf = ?').get(cpf);
+    const clean = String(cpf).replace(/\D/g, '');
+    return db
+      .prepare(
+        `SELECT * FROM users
+         WHERE cpf = ?
+            OR REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '') = ?`
+      )
+      .get(clean, clean);
   },
 
   findById(id) {

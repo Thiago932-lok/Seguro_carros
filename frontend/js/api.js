@@ -39,7 +39,10 @@ async function api(path, options = {}) {
     throw new Error(data.error || 'Não autorizado');
   }
 
-  if (!res.ok) throw new Error(data.error || 'Erro na requisição');
+  if (!res.ok) {
+    const detail = data.fields?.length ? ` (${data.fields.join(', ')})` : '';
+    throw new Error((data.error || 'Erro na requisição') + detail);
+  }
   return data;
 }
 

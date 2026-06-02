@@ -48,6 +48,7 @@
     </main>
   </section>
   <script src="/js/api.js"></script>
+  <script src="/js/cpf.js"></script>
   <script src="/js/regions.js"></script>
   <script src="/js/auth.js"></script>
   <script>
@@ -58,7 +59,7 @@
     api('/users/me').then((u) => {
       document.getElementById('name').value = u.name;
       document.getElementById('email').value = u.email;
-      document.getElementById('cpf').value = u.cpf;
+      document.getElementById('cpf').value = formatCpf(u.cpf);
       document.getElementById('phone').value = u.phone || '';
       populateRegionSelect('region', u.region || 'SP');
     });
