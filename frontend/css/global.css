@@ -1,16 +1,18 @@
 :root {
-  --green-dark: #0d5c2e;
-  --green: #1a8f4a;
+  --green-dark: #0a4d26;
+  --green: #168f47;
   --green-light: #2ecc71;
-  --green-bg: #e8f5ee;
-  --text: #1a2e22;
-  --muted: #5a6b62;
+  --green-bg: #edf7f1;
+  --text: #14261c;
+  --muted: #5f7368;
   --white: #ffffff;
-  --border: #d4e8dc;
+  --border: #cfe6d8;
   --danger: #c0392b;
-  --shadow: 0 4px 24px rgba(13, 92, 46, 0.12);
-  --radius: 12px;
-  --font: 'Segoe UI', system-ui, sans-serif;
+  --warning: #f39c12;
+  --shadow: 0 4px 20px rgba(10, 77, 38, 0.1);
+  --shadow-lg: 0 12px 40px rgba(10, 77, 38, 0.16);
+  --radius: 14px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -22,7 +24,7 @@
 body {
   font-family: var(--font);
   color: var(--text);
-  background: var(--green-bg);
+  background: linear-gradient(160deg, #edf7f1 0%, #f8fbf9 45%, #e3f0e8 100%);
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -58,13 +60,15 @@ a:hover {
 }
 
 .btn-primary {
-  background: var(--green);
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
   color: var(--white);
+  box-shadow: 0 4px 14px rgba(22, 143, 71, 0.25);
 }
 
 .btn-primary:hover {
-  background: var(--green-dark);
+  background: linear-gradient(135deg, var(--green-dark), #083d1f);
   text-decoration: none;
+  box-shadow: 0 6px 18px rgba(22, 143, 71, 0.3);
 }
 
 .btn-outline {

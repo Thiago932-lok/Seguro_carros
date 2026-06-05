@@ -10,6 +10,15 @@ async function register(req, res, next) {
     const { name, cpf, email, password, phone, region } = req.body;
     const cpfClean = String(cpf).replace(/\D/g, '');
 
+    // Password policy (per project doc): 8+ chars, 1 uppercase, 1 number, 1 special char.
+    const pw = String(password || '');
+    const strongPw = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!strongPw.test(pw)) {
+      return res.status(400).json({
+        error: 'Senha fraca. Use no mínimo 8 caracteres, com 1 maiúscula, 1 número e 1 caractere especial.',
+      });
+    }
+
     if (cpfClean.length !== 11) {
       return res.status(400).json({ error: 'CPF deve conter 11 dígitos' });
     }

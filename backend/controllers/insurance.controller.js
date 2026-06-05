@@ -14,6 +14,36 @@ async function contract(req, res, next) {
     const quote = Quote.findByIdAndUser(quoteId, req.user.id);
     if (!quote) return res.status(404).json({ error: 'Cotação não encontrada' });
 
+    // Quote validity: 7 days. If expired, recalculate before contracting.
+    const createdAt = new Date(String(quote.created_at || quote.createdAt || ''));
+    const now = new Date();
+    const ageDays = Number.isFinite(createdAt.getTime())
+      ? Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24))
+      : 0;
+    if (ageDays >= 7) {
+      const car = Car.findByIdAndUser(quote.car_id, req.user.id);
+      if (!car) return res.status(404).json({ error: 'Veículo não encontrado' });
+      const user = User.findById(req.user.id);
+      const pricing = calculateMonthlyPremium({
+        fipeValue: car.fipe_value,
+        year: car.year,
+        usage: car.usage_type,
+        hasGarage: !!car.has_garage,
+        region: user.region,
+      });
+      Quote.updateValues(quoteId, req.user.id, {
+        fipeValue: car.fipe_value,
+        monthlyPremium: pricing.monthlyPremium,
+        coveredValue: pricing.coveredValue,
+        franchise: pricing.franchise,
+      });
+      // Refresh local object for the rest of the flow.
+      quote.fipe_value = car.fipe_value;
+      quote.monthly_premium = pricing.monthlyPremium;
+      quote.covered_value = pricing.coveredValue;
+      quote.franchise = pricing.franchise;
+    }
+
     const existing = Insurance.findActiveByUser(req.user.id);
     if (existing.length) {
       return res.status(400).json({ error: 'Você já possui proteção ativa. Cancele antes de contratar outra.' });
@@ -33,6 +63,7 @@ async function contract(req, res, next) {
       coveredValue: quote.covered_value,
       monthlyPremium: quote.monthly_premium,
       franchise: quote.franchise,
+      status: 'pendente_vistoria',
       validFrom,
       validUntil: validUntil.toISOString().slice(0, 10),
     });

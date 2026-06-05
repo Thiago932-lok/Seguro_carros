@@ -16,7 +16,7 @@ const Car = {
         data.plate.toUpperCase(),
         data.color || null,
         data.fipeCode || null,
-        data.fipeValue,
+        Number(data.fipeValue) || 0,
         data.usageType || 'particular',
         data.hasGarage ? 1 : 0
       );

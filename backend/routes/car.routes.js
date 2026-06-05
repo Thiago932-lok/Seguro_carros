@@ -7,6 +7,8 @@ const router = Router();
 
 router.get('/fipe/brands', car.getFipeBrands);
 router.get('/fipe/brands/:brandCode/models', car.getFipeModels);
+router.get('/fipe/brands/:brandCode/models/:modelCode/years', car.getFipeYears);
+router.get('/fipe/brands/:brandCode/models/:modelCode/years/:yearCode/price', car.getFipePrice);
 
 router.use(authMiddleware);
 router.get('/', car.list);

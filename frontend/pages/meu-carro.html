@@ -3,35 +3,58 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meu Carro — Seguradora</title>
+  <title>Meu Carro — MobiSeguros</title>
   <link rel="stylesheet" href="/css/global.css" />
   <link rel="stylesheet" href="/css/dashboard.css" />
   <link rel="stylesheet" href="/css/forms.css" />
+  <link rel="stylesheet" href="/css/components.css" />
 </head>
 <body>
   <header class="header">
     <section class="container header-inner">
-      <a href="/pages/dashboard.html" class="logo">Seguradora</a>
+      <a href="/pages/dashboard.html" class="logo">Mobi<span style="color:var(--green-light)">Seguros</span></a>
       <button id="btn-logout" class="btn btn-outline">Sair</button>
     </section>
   </header>
   <section class="app-layout">
     <nav class="sidebar" id="sidebar-nav"></nav>
     <main class="main-content">
-      <h1 class="page-title">Cadastrar Veículo</h1>
+      <header class="page-header">
+        <h1 class="page-title">Meu Veículo</h1>
+        <p class="page-subtitle">Cadastre seu carro e consulte o valor FIPE automaticamente.</p>
+      </header>
       <p id="alert" class="alert alert-error hidden"></p>
-      <article class="card">
+
+      <article class="card card-elevated">
         <form id="car-form">
+          <h2 class="section-title"><span class="step-badge">1</span> Buscar pela FIPE</h2>
+          <p class="muted" style="margin-bottom:1rem">
+            Selecione marca, modelo e ano. O valor FIPE será preenchido automaticamente.
+          </p>
           <p class="form-row">
             <span class="form-group">
-              <label for="fipe-brand">Marca FIPE (opcional)</label>
+              <label for="fipe-brand">Marca</label>
               <select id="fipe-brand"></select>
             </span>
             <span class="form-group">
-              <label for="fipe-model">Modelo FIPE</label>
-              <select id="fipe-model"><option value="">Modelo</option></select>
+              <label for="fipe-model">Modelo</label>
+              <select id="fipe-model" disabled><option value="">Selecione a marca</option></select>
             </span>
           </p>
+          <p class="form-row">
+            <span class="form-group">
+              <label for="fipe-year">Ano</label>
+              <select id="fipe-year" disabled><option value="">Selecione o modelo</option></select>
+            </span>
+            <span class="form-group">
+              <label for="fipe-value">Valor FIPE (R$)</label>
+              <input type="number" id="fipe-value" step="0.01" placeholder="Preenchido automaticamente" />
+            </span>
+          </p>
+
+          <hr class="divider" />
+
+          <h2 class="section-title"><span class="step-badge">2</span> Dados do veículo</h2>
           <p class="form-row">
             <span class="form-group">
               <label for="brand">Marca</label>
@@ -49,29 +72,66 @@
             </span>
             <span class="form-group">
               <label for="plate">Placa</label>
-              <input id="plate" required placeholder="ABC1D23" maxlength="7" />
+              <input id="plate" required placeholder="ABC1D23" maxlength="7" autocapitalize="characters" />
             </span>
           </p>
-          <p class="form-row">
-            <span class="form-group">
-              <label for="color">Cor</label>
-              <input id="color" />
-            </span>
-            <span class="form-group">
-              <label for="fipe-value">Valor FIPE manual (R$)</label>
-              <input type="number" id="fipe-value" step="0.01" placeholder="Se FIPE offline" />
-            </span>
+
+          <p class="form-group">
+            <label>Cor do veículo</label>
+            <div class="color-picker" id="color-picker">
+              <label class="color-option">
+                <input type="radio" name="color" value="Branco" required />
+                <span class="color-chip"><span class="color-swatch" style="background:#fff"></span>Branco</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Preto" />
+                <span class="color-chip"><span class="color-swatch" style="background:#1a1a1a"></span>Preto</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Prata" />
+                <span class="color-chip"><span class="color-swatch" style="background:#c0c0c0"></span>Prata</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Cinza" />
+                <span class="color-chip"><span class="color-swatch" style="background:#6b7280"></span>Cinza</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Vermelho" />
+                <span class="color-chip"><span class="color-swatch" style="background:#dc2626"></span>Vermelho</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Azul" />
+                <span class="color-chip"><span class="color-swatch" style="background:#2563eb"></span>Azul</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Verde" />
+                <span class="color-chip"><span class="color-swatch" style="background:#16a34a"></span>Verde</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Amarelo" />
+                <span class="color-chip"><span class="color-swatch" style="background:#eab308"></span>Amarelo</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Bege" />
+                <span class="color-chip"><span class="color-swatch" style="background:#d4b896"></span>Bege</span>
+              </label>
+              <label class="color-option">
+                <input type="radio" name="color" value="Marrom" />
+                <span class="color-chip"><span class="color-swatch" style="background:#78350f"></span>Marrom</span>
+              </label>
+            </div>
           </p>
+
           <p class="form-row">
             <span class="form-group">
-              <label for="usage">Uso</label>
+              <label for="usage">Tipo de uso</label>
               <select id="usage">
                 <option value="particular">Particular</option>
                 <option value="comercial">Comercial</option>
-                <option value="app">App (Uber/99)</option>
+                <option value="app">Aplicativo (Uber/99)</option>
               </select>
             </span>
-            <span class="form-group">
+            <span class="form-group" style="display:flex;align-items:flex-end">
               <label class="checkbox-label">
                 <input type="checkbox" id="garage" /> Garagem fechada
               </label>
@@ -82,9 +142,10 @@
           </p>
         </form>
       </article>
-      <article class="card">
+
+      <article class="card card-elevated">
         <h2>Meus veículos</h2>
-        <section id="cars-list">Carregando...</section>
+        <section id="cars-list" class="vehicle-grid">Carregando...</section>
       </article>
     </main>
   </section>

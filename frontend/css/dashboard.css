@@ -5,9 +5,10 @@
 }
 
 .sidebar {
-  background: var(--green-dark);
+  background: linear-gradient(180deg, var(--green-dark) 0%, #083d1f 100%);
   color: var(--white);
   padding: 1.5rem 0;
+  box-shadow: 4px 0 24px rgba(10, 77, 38, 0.12);
 }
 
 .sidebar a {
@@ -66,6 +67,7 @@
   padding: 1.5rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid rgba(207, 230, 216, 0.8);
   margin-bottom: 1.5rem;
 }
 
@@ -116,6 +118,11 @@ th {
 .badge-aberto {
   background: #cce5ff;
   color: #004085;
+}
+
+.badge-atrasado {
+  background: #fdecea;
+  color: #c0392b;
 }
 
 .quote-result {

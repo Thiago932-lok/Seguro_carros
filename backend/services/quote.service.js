@@ -25,6 +25,13 @@ async function simulate(userId, carId) {
   const car = Car.findByIdAndUser(carId, userId);
   if (!car) throw Object.assign(new Error('Veículo não encontrado'), { status: 404 });
 
+  // If a car was saved without a FIPE value (or legacy value), estimate to avoid wrong quotes.
+  if (!car.fipe_value || Number(car.fipe_value) <= 0) {
+    const estimated = fipeService.estimateFromSeed(car.brand, car.model, car.year);
+    Car.updateFipe(car.id, estimated, car.fipe_code || null);
+    car.fipe_value = estimated;
+  }
+
   const result = buildQuoteForCar(car, user);
   const id = uuid();
   Quote.create({

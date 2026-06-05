@@ -1,3 +1,15 @@
+function renderBreakdown(b) {
+  if (!b) return '—';
+  const baseRate = typeof b.baseRatePercent === 'number' ? `${b.baseRatePercent.toFixed(2)}%` : '—';
+  const mult = typeof b.multiplier === 'number' ? b.multiplier.toFixed(2) : '—';
+  const coverage = typeof b.coveragePercent === 'number' ? `${b.coveragePercent}%` : '—';
+  return `
+    <p style="margin-bottom:0.25rem"><strong>Taxa base</strong>: ${baseRate} ao mês</p>
+    <p style="margin-bottom:0.25rem"><strong>Multiplicador</strong>: ${mult} (ano/uso/garagem/UF)</p>
+    <p style="margin-bottom:0.25rem"><strong>Cobertura</strong>: ${coverage} do valor FIPE</p>
+  `;
+}
+
 async function runSimulation() {
   const alert = document.getElementById('alert');
   const carId = document.getElementById('car-select')?.value;
@@ -20,7 +32,10 @@ async function runSimulation() {
     document.getElementById('franchise-value').textContent = formatMoney(data.franchise);
     document.getElementById('fipe-display').textContent = formatMoney(data.fipeValue);
     document.getElementById('last-quote-id').value = data.quoteId;
+    const breakdown = document.getElementById('quote-breakdown');
+    if (breakdown) breakdown.innerHTML = renderBreakdown(data.breakdown);
   } catch (err) {
+    document.getElementById('quote-result')?.classList.add('hidden');
     showAlert(alert, err.message);
   }
 }

@@ -19,6 +19,16 @@ const Quote = {
       );
   },
 
+  updateValues(id, userId, data) {
+    return db
+      .prepare(
+        `UPDATE quotes
+         SET fipe_value = ?, monthly_premium = ?, covered_value = ?, franchise = ?
+         WHERE id = ? AND user_id = ?`
+      )
+      .run(data.fipeValue, data.monthlyPremium, data.coveredValue, data.franchise, id, userId);
+  },
+
   findByUser(userId) {
     return db
       .prepare(

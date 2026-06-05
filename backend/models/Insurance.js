@@ -27,7 +27,7 @@ const Insurance = {
         `SELECT i.*, c.brand, c.model, c.plate, c.year
          FROM insurances i
          JOIN cars c ON c.id = i.car_id
-         WHERE i.user_id = ? AND i.status = 'ativo'
+         WHERE i.user_id = ? AND i.status IN ('ativo', 'pendente_vistoria')
          ORDER BY i.created_at DESC`
       )
       .all(userId);

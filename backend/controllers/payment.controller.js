@@ -12,13 +12,28 @@ function list(req, res) {
   res.json({ payments, summary });
 }
 
-async function pay(req, res, next) {
+function getOne(req, res, next) {
   try {
-    const result = await paymentService.processPayment(req.params.id, req.user.id);
-    res.json({ message: 'Pagamento confirmado', payment: result });
+    const details = paymentService.getPaymentDetails(req.params.id, req.user.id);
+    res.json(details);
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { list, pay };
+async function pay(req, res, next) {
+  try {
+    const method = req.body?.method || 'pix';
+    const result = await paymentService.processPayment(req.params.id, req.user.id, method);
+    const messages = {
+      pix: 'Pagamento PIX confirmado com sucesso!',
+      boleto: 'Pagamento via boleto confirmado!',
+      card: 'Pagamento com cartão confirmado!',
+    };
+    res.json({ message: messages[method] || 'Pagamento confirmado', payment: result });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { list, getOne, pay };

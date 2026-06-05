@@ -3,35 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pagamentos — Seguradora</title>
+  <title>Pagamentos — MobiSeguros</title>
   <link rel="stylesheet" href="/css/global.css" />
   <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/components.css" />
 </head>
 <body>
   <header class="header">
     <section class="container header-inner">
-      <a href="/pages/dashboard.html" class="logo">Seguradora</a>
+      <a href="/pages/dashboard.html" class="logo">Mobi<span style="color:var(--green-light)">Seguros</span></a>
       <button id="btn-logout" class="btn btn-outline">Sair</button>
     </section>
   </header>
   <section class="app-layout">
     <nav class="sidebar" id="sidebar-nav"></nav>
     <main class="main-content">
-      <h1 class="page-title">Pagamentos</h1>
+      <header class="page-header">
+        <h1 class="page-title">Pagamentos</h1>
+        <p class="page-subtitle">Acompanhe suas mensalidades e pague com PIX, boleto ou cartão.</p>
+      </header>
+
       <section class="stats-grid">
-        <article class="stat-card"><span class="label">Pagas</span><p class="value" id="summary-paid">0</p></article>
-        <article class="stat-card"><span class="label">Pendentes</span><p class="value" id="summary-pending">0</p></article>
+        <article class="stat-card accent">
+          <span class="label">Mensalidades pagas</span>
+          <p class="value" id="summary-paid">0</p>
+        </article>
+        <article class="stat-card">
+          <span class="label">Pendentes</span>
+          <p class="value" id="summary-pending">0</p>
+        </article>
+        <article class="stat-card">
+          <span class="label">Próximo vencimento</span>
+          <p class="value" id="summary-next" style="font-size:1.1rem">—</p>
+        </article>
       </section>
-      <article class="card">
-        <table>
-          <thead>
-            <tr><th>Mês</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ação</th></tr>
-          </thead>
-          <tbody id="payments-body"></tbody>
-        </table>
+
+      <article class="card card-elevated">
+        <h2>Histórico de mensalidades</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Mês</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ação</th></tr>
+            </thead>
+            <tbody id="payments-body"></tbody>
+          </table>
+        </div>
       </article>
     </main>
   </section>
+
+  <!-- Modal Boleto -->
+  <div id="boleto-modal" class="modal hidden">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-panel">
+      <header class="modal-header">
+        <h2>Pagamento da mensalidade</h2>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Fechar">&times;</button>
+      </header>
+      <div class="modal-body">
+        <section class="boleto-sheet" id="boleto-content">
+          <div class="boleto-top">
+            <div>
+              <p class="boleto-brand">MobiSeguros</p>
+              <p class="muted" style="font-size:0.85rem">Proteção Veicular — Mensalidade</p>
+            </div>
+            <div class="boleto-amount">
+              <p class="label">Valor a pagar</p>
+              <p class="value" id="boleto-amount">R$ 0,00</p>
+            </div>
+          </div>
+
+          <div class="boleto-grid">
+            <div class="boleto-field"><p class="label">Beneficiário</p><p class="value">MobiSeguros Associação LTDA</p></div>
+            <div class="boleto-field"><p class="label">CNPJ</p><p class="value">12.345.678/0001-90</p></div>
+            <div class="boleto-field"><p class="label">Pagador</p><p class="value" id="boleto-payer">—</p></div>
+            <div class="boleto-field"><p class="label">CPF</p><p class="value" id="boleto-cpf">—</p></div>
+            <div class="boleto-field"><p class="label">Apólice</p><p class="value" id="boleto-policy">—</p></div>
+            <div class="boleto-field"><p class="label">Veículo</p><p class="value" id="boleto-vehicle">—</p></div>
+            <div class="boleto-field"><p class="label">Referência</p><p class="value" id="boleto-ref">—</p></div>
+            <div class="boleto-field"><p class="label">Vencimento</p><p class="value" id="boleto-due">—</p></div>
+            <div class="boleto-field"><p class="label">Nosso número</p><p class="value" id="boleto-number">—</p></div>
+            <div class="boleto-field"><p class="label">Instruções</p><p class="value">Não receber após o vencimento</p></div>
+          </div>
+
+          <div class="boleto-lines"></div>
+          <div class="boleto-barcode" id="boleto-barcode">—</div>
+        </section>
+
+        <nav class="payment-tabs" role="tablist">
+          <button type="button" class="payment-tab active" data-tab="pix">PIX</button>
+          <button type="button" class="payment-tab" data-tab="boleto">Boleto</button>
+          <button type="button" class="payment-tab" data-tab="card">Cartão</button>
+        </nav>
+
+        <section class="payment-panel active" id="panel-pix">
+          <p class="muted">Escaneie o QR Code ou copie o código PIX para pagar.</p>
+          <div class="pix-qr">📱</div>
+          <div class="pix-code-box">
+            <input type="text" id="pix-code" readonly />
+            <button type="button" class="btn btn-outline btn-sm" id="btn-copy-pix">Copiar</button>
+          </div>
+          <p class="form-actions" style="margin-top:1rem">
+            <button type="button" class="btn btn-primary btn-block" id="btn-pay-pix">Confirmar pagamento PIX</button>
+          </p>
+        </section>
+
+        <section class="payment-panel" id="panel-boleto">
+          <p class="muted">Baixe o boleto em PDF ou pague pelo código de barras acima.</p>
+          <p class="form-actions">
+            <button type="button" class="btn btn-outline btn-block" id="btn-download-boleto">Baixar boleto (PDF)</button>
+            <button type="button" class="btn btn-primary btn-block" id="btn-pay-boleto" style="margin-top:0.75rem">Confirmar pagamento via boleto</button>
+          </p>
+        </section>
+
+        <section class="payment-panel" id="panel-card">
+          <p class="form-group">
+            <label for="card-number">Número do cartão</label>
+            <input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" />
+          </p>
+          <p class="form-row">
+            <span class="form-group">
+              <label for="card-expiry">Validade</label>
+              <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" />
+            </span>
+            <span class="form-group">
+              <label for="card-cvv">CVV</label>
+              <input type="text" id="card-cvv" placeholder="123" maxlength="4" />
+            </span>
+          </p>
+          <p class="form-actions">
+            <button type="button" class="btn btn-primary btn-block" id="btn-pay-card">Pagar com cartão</button>
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
   <script src="/js/payment.js"></script>

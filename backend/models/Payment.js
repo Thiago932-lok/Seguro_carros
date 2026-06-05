@@ -34,6 +34,21 @@ const Payment = {
     return db.prepare('SELECT * FROM payments WHERE id = ? AND user_id = ?').get(id, userId);
   },
 
+  findDetailByIdAndUser(id, userId) {
+    return db
+      .prepare(
+        `SELECT p.*, i.policy_number, i.monthly_premium, i.covered_value, i.status as insurance_status,
+                c.brand, c.model, c.plate, c.year, c.color,
+                u.name as user_name, u.cpf as user_cpf, u.email as user_email
+         FROM payments p
+         JOIN insurances i ON i.id = p.insurance_id
+         JOIN cars c ON c.id = i.car_id
+         JOIN users u ON u.id = p.user_id
+         WHERE p.id = ? AND p.user_id = ?`
+      )
+      .get(id, userId);
+  },
+
   markPaid(id) {
     return db
       .prepare(`UPDATE payments SET status = 'pago', paid_at = datetime('now') WHERE id = ?`)
